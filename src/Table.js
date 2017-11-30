@@ -15,13 +15,13 @@ const styles = theme => ({
   },
   strong: {
     fontWeight: 'bold',
-    backgroundColor: '#d8d8d8',
+    backgroundColor: '#f2f2f2',
   },
   light: {
-    backgroundColor: '#d8d8d8',
+    backgroundColor: '#f2f2f2',
   },
   dark: {
-    backgroundColor: 'darkgrey',
+    backgroundColor: '#d8d8d8',
   },
   red: {
     color: '#cf5259',
@@ -32,6 +32,10 @@ class BasicTable extends Component {
   // constructor(props) {
   //   super(props);
   // }
+  limitDecimals(num) {
+    return num.toFixed(2)
+  }
+
   afterTax(income) {
     let total;
     if(income <= 9325) {
@@ -49,7 +53,7 @@ class BasicTable extends Component {
     } else if (income > 418400) {
         total = income * .604;
     }
-    return total;
+    return this.limitDecimals(total);
   }
 
   render() {
@@ -81,8 +85,9 @@ class BasicTable extends Component {
             <TableRow className={classes.light}>
               <TableCell>Incrome From Work</TableCell>
               {this.props.userData.map((year, i) => {
+                console.log(typeof year.total)
                   return (
-                    <TableCell key={i} numeric>${year.total}</TableCell>
+                    <TableCell key={i} numeric>${this.limitDecimals(Number(year.total))}</TableCell>
                   );
                 })}
             </TableRow>
@@ -90,7 +95,7 @@ class BasicTable extends Component {
               <TableCell>Social Security</TableCell>
               {this.props.userData.map((year, i) => {
                   return (
-                    <TableCell key={i} numeric>${year.sources.user_social_security}</TableCell>
+                    <TableCell key={i} numeric>${this.limitDecimals(year.sources.user_social_security)}</TableCell>
                   );
                 })}
             </TableRow>
@@ -114,7 +119,7 @@ class BasicTable extends Component {
               <TableCell>Taxes (Est.)</TableCell>
               {this.props.userData.map((year, i) => {
                   return (
-                    <TableCell className={classes.red} key={i} numeric>${year.total - this.afterTax(year.total)}</TableCell>
+                    <TableCell className={classes.red} key={i} numeric>${this.limitDecimals(year.total - this.afterTax(year.total))}</TableCell>
                   );
                 })}
             </TableRow>

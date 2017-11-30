@@ -15,51 +15,52 @@ const styles = theme => ({
   },
   strong: {
     fontWeight: 'bold',
+    backgroundColor: '#d8d8d8',
+  },
+  light: {
+    backgroundColor: '#d8d8d8',
+  },
+  dark: {
+    backgroundColor: 'darkgrey',
+  },
+  red: {
+    color: '#cf5259',
   },
 });
 
-let id = 0;
-function createData(name, age, fat, carbs, protein) {
-  id += 1;
-  // var age = 0;
-  // this.props.userData.map(year => {
-  //   age = year.start_date.substring(0,4) - props.userBirthday
-  // })
-  return { id, name, age, fat, carbs, protein};
-}
-
-const rowNames = ['Your Age', 'Income From Work', 'Social Security', 'Retirement Savings Withdrawals', 'Combined Income', 'Taxes (Est.)', 'After-Tax Income']
-const data = [
-  createData('Your Age', 10, 6.0, 24, 4.0),
-  createData('Income From Work', 11, 9.0, 37, 4.3),
-  createData('Social Security', 12, 16.0, 24, 6.0),
-  createData('Retirement Savings Withdrawals', 13, 3.7, 67, 4.3),
-  createData('Combined Income', 356, 16.0, 49, 3.9),
-  createData('Taxes (Est.)', 356, 16.0, 49, 3.9),
-  createData('After-Tax Income', 356, 16.0, 49, 3.9)
-];
-
 class BasicTable extends Component {
-  constructor(props) {
-    super(props);
-  }
-
+  // constructor(props) {
+  //   super(props);
+  // }
   afterTax(income) {
+    let total;
     if(income <= 9325) {
-      return income * 
+      total = income * .9;
+    } else if (income <= 37950) {
+        total = income * .85;
+    } else if (income <= 91900) {
+        total = income * .75;
+    } else if (income <= 191650) {
+        total = income * .72;
+    } else if (income <= 416700) {
+        total = income * .66;
+    } else if (income <= 418400) {
+        total = income * .65;
+    } else if (income > 418400) {
+        total = income * .604;
     }
+    return total;
   }
 
   render() {
     
     const { classes } = this.props;
-    console.log('props', this.props.userData);
 
     return (
       <Paper className={classes.root}>
         <Table className={classes.table}>
           <TableHead>
-            <TableRow>
+            <TableRow className={classes.dark}>
               <TableCell>Year</TableCell>
                 {this.props.userData.map((year, i) => {
                   return (
@@ -69,7 +70,7 @@ class BasicTable extends Component {
             </TableRow>
           </TableHead>
           <TableBody>
-            <TableRow>
+            <TableRow className={classes.light}>
               <TableCell>Your Age</TableCell>
               {this.props.userData.map((year, i) => {
                   return (
@@ -77,7 +78,7 @@ class BasicTable extends Component {
                   );
                 })}
             </TableRow>
-            <TableRow>
+            <TableRow className={classes.light}>
               <TableCell>Incrome From Work</TableCell>
               {this.props.userData.map((year, i) => {
                   return (
@@ -85,7 +86,7 @@ class BasicTable extends Component {
                   );
                 })}
             </TableRow>
-            <TableRow>
+            <TableRow className={classes.light}>
               <TableCell>Social Security</TableCell>
               {this.props.userData.map((year, i) => {
                   return (
@@ -93,7 +94,7 @@ class BasicTable extends Component {
                   );
                 })}
             </TableRow>
-            <TableRow>
+            <TableRow className={classes.light}>
               <TableCell>Retirement Savings Withdrawals</TableCell>
               {this.props.userData.map((year, i) => {
                   return (
@@ -101,7 +102,7 @@ class BasicTable extends Component {
                   );
                 })}
             </TableRow>
-            <TableRow>
+            <TableRow className={classes.dark}>
               <TableCell>Combined Income</TableCell>
               {this.props.userData.map((year, i) => {
                   return (
@@ -109,19 +110,19 @@ class BasicTable extends Component {
                   );
                 })}
             </TableRow>
-            <TableRow>
+            <TableRow className={classes.light}>
               <TableCell>Taxes (Est.)</TableCell>
               {this.props.userData.map((year, i) => {
                   return (
-                    <TableCell key={i} numeric>${year.start_date.substring(0,4)}</TableCell>
+                    <TableCell className={classes.red} key={i} numeric>${year.total - this.afterTax(year.total)}</TableCell>
                   );
                 })}
             </TableRow>
-            <TableRow>
+            <TableRow className={classes.strong}>
               <TableCell>After-Tax Income</TableCell>
               {this.props.userData.map((year, i) => {
                   return (
-                    <TableCell key={i} numeric>${year.start_date.substring(0,4)}</TableCell>
+                    <TableCell key={i} numeric>${this.afterTax(year.total)}</TableCell>
                   );
                 })}
             </TableRow>

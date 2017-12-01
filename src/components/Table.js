@@ -22,7 +22,7 @@ const styles = theme => ({
   },
   strong: {
     fontWeight: 'bold',
-    backgroundColor: '#f2f2f2',
+    backgroundColor: '#d8d8d8',
     zIndex: '1000',
   },
   light: {
